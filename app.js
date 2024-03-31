@@ -8694,22 +8694,47 @@ ${motaEngilMapSVG}
   return securityReportHTML;
 };
 
+// const downloadsFolderPath = "C:\\Users\\Administrator\\Downloads";
+// const uniqueFilename = `Mota-Engil Nigeria National Weekly_Security Report ${formattedToday}.pdf`;
+// const pdfPath = path.join(downloadsFolderPath, uniqueFilename);
+
+// const generate_incident_report_PDF = (pdfData, filename, callback) => {
+//   console.log('Generating PDF...');
+//   pdf.create(pdfData).toFile(filename, (err, res) => {
+//     if (err) {
+//       console.error('Error during PDF generation:', err);
+//       callback(err);
+//     } else {
+//       console.log('PDF generation completed.');
+//       callback();
+//     }
+//   });
+// };
 const downloadsFolderPath = "C:\\Users\\Administrator\\Downloads";
 const uniqueFilename = `Mota-Engil Nigeria National Weekly_Security Report ${formattedToday}.pdf`;
 const pdfPath = path.join(downloadsFolderPath, uniqueFilename);
+console.log('PDF Path:', pdfPath); // Debugging line to check the constructed PDF path
+
 
 const generate_incident_report_PDF = (pdfData, filename, callback) => {
   console.log('Generating PDF...');
-  pdf.create(pdfData).toFile(filename, (err, res) => {
-    if (err) {
-      console.error('Error during PDF generation:', err);
-      callback(err);
-    } else {
-      console.log('PDF generation completed.');
-      callback();
-    }
-  });
+  try {
+    pdf.create(pdfData).toFile(filename, (err, res) => {
+      if (err) {
+        console.error('Error during PDF generation:', err);
+        callback(err);
+      } else {
+        console.log('PDF generation completed.');
+        callback(null, filename); // Pass the filename back in the callback
+      }
+    });
+  } catch (error) {
+    console.error('An error occurred during PDF generation:', error);
+    callback(error);
+  }
 };
+
+
 /////////////////////////unlock
 const sendMessageToStaffs = async (groupId, pdfData, pdfFilename) => {
   try {
