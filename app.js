@@ -9234,52 +9234,52 @@ app.post('/send_expatriate_parameters', async (req, res) => {
 // });
 
 /////////////////////////////////////////////////////////////////////////////
-function fetchDataForName(name, callback) {
-  // Assume name is already validated and sanitized
-  const userLocation = name; // Assuming user's location details come from the name
-  // const userSpecific = 'crime' + userLocation;
-  // const userSpecific = 'crime' + "nigeria";
-  const userSpecific = "crime";
-  const webLink = `https://www.google.com/search?q=${encodeURIComponent(userSpecific)}&gl=us&hl=en`;
+// function fetchDataForName(name, callback) {
+//   // Assume name is already validated and sanitized
+//   const userLocation = name; // Assuming user's location details come from the name
+//   // const userSpecific = 'crime' + userLocation;
+//   // const userSpecific = 'crime' + "nigeria";
+//   const userSpecific = "crime";
+//   const webLink = `https://www.google.com/search?q=${encodeURIComponent(userSpecific)}&gl=us&hl=en`;
 
-  unirest
-    .get(webLink)
-    .headers({
-      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.54 Safari/537.36',
-    })
-    .then((response) => {
-      const $ = cheerio.load(response.body);
-      const organicResults = [];
+//   unirest
+//     .get(webLink)
+//     .headers({
+//       'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.54 Safari/537.36',
+//     })
+//     .then((response) => {
+//       const $ = cheerio.load(response.body);
+//       const organicResults = [];
 
-      $(".yuRUbf > a").each((i, el) => {
-        const title = $(el).find('h3').text();
-        const link = $(el).attr('href');
-        const snippet = $(el).parent().find('.IsZvec').text(); // Assuming this class is for snippets
-        const displayedLink = $(el).find('.tjvcx').text(); // Assuming this class is for displayed links
+//       $(".yuRUbf > a").each((i, el) => {
+//         const title = $(el).find('h3').text();
+//         const link = $(el).attr('href');
+//         const snippet = $(el).parent().find('.IsZvec').text(); // Assuming this class is for snippets
+//         const displayedLink = $(el).find('.tjvcx').text(); // Assuming this class is for displayed links
         
-        organicResults.push({
-          title,
-          link,
-          snippet,
-          displayedLink,
-        });
-      });
+//         organicResults.push({
+//           title,
+//           link,
+//           snippet,
+//           displayedLink,
+//         });
+//       });
 
-      callback(null, organicResults); // Pass the fetched data to the callback function
-    })
-    .catch((error) => {
-      callback(error, null); // Pass any errors to the callback function
-    });
-}
+//       callback(null, organicResults); // Pass the fetched data to the callback function
+//     })
+//     .catch((error) => {
+//       callback(error, null); // Pass any errors to the callback function
+//     });
+// }
 
-// Example usage:
-fetchDataForName('homer', (error, data) => {
-  if (error) {
-    console.error('Error fetching data:', error);
-  } else {
-    console.log('Fetched data:', data);
-  }
-});
+// // Example usage:
+// fetchDataForName('homer', (error, data) => {
+//   if (error) {
+//     console.error('Error fetching data:', error);
+//   } else {
+//     console.log('Fetched data:', data);
+//   }
+// });
 
 
 //////////////////////////////////////////////////////////////////////////////////////
