@@ -8706,39 +8706,39 @@ const generate_incident_report_PDF = (pdfData, filename, callback) => {
   });
 };
 ///////////////////////////unlock
-const sendMessageToStaffs = async (groupId, pdfData, pdfFilename) => {
-  try {
-    const pdfResponse = await axios.post(
-      'https://gate.whapi.cloud/messages/document',
-      {
-        to: `${staff_no}@s.whatsapp.net`,
-        media: `data:application/octet-stream;name=${pdfFilename};base64,${pdfData}`,
-      },
-      {
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+// const sendMessageToStaffs = async (groupId, pdfData, pdfFilename) => {
+//   try {
+//     const pdfResponse = await axios.post(
+//       'https://gate.whapi.cloud/messages/document',
+//       {
+//         to: `${staff_no}@s.whatsapp.net`,
+//         media: `data:application/octet-stream;name=${pdfFilename};base64,${pdfData}`,
+//       },
+//       {
+//         headers: {
+//           Accept: 'application/json',
+//           'Content-Type': 'application/json',
+//           Authorization: `Bearer ${token}`,
+//         },
+//       }
+//     );
 
-    console.log('PDF file sent successfully:', pdfResponse.data);
-  } catch (error) {
-    console.error('Error sending message and PDF:', error.message);
-  }
-};
+//     console.log('PDF file sent successfully:', pdfResponse.data);
+//   } catch (error) {
+//     console.error('Error sending message and PDF:', error.message);
+//   }
+// };
 
-const securityReportHTML = generate_security_report_PDF();
+// const securityReportHTML = generate_security_report_PDF();
 
-generate_incident_report_PDF(securityReportHTML, pdfPath, (error) => {
-  if (error) {
-    console.error('PDF generation failed:', error);
-  } else {
-    const pdfData = fs.readFileSync(pdfPath, { encoding: 'base64' });
-    sendMessageToStaffs(groupId, pdfData, uniqueFilename);
-  }
-});
+// generate_incident_report_PDF(securityReportHTML, pdfPath, (error) => {
+//   if (error) {
+//     console.error('PDF generation failed:', error);
+//   } else {
+//     const pdfData = fs.readFileSync(pdfPath, { encoding: 'base64' });
+//     sendMessageToStaffs(groupId, pdfData, uniqueFilename);
+//   }
+// });
 
 
 // // setInterval(() => {
@@ -8767,8 +8767,42 @@ generate_incident_report_PDF(securityReportHTML, pdfPath, (error) => {
 //   });
 // }, 30 * 60 * 1000);
 
+// Define an array of random facts
+const randomFacts = [
+  "The first oranges weren't orange.",
+  "A strawberry is not an actual berry, but a banana is.",
+  "Bananas are berries, but strawberries aren't.",
+  "The unicorn is the national animal of Scotland.",
+  "The shortest war in history lasted only 38 minutes.",
+  "The Eiffel Tower can be 15 cm taller during the summer.",
+  "Octopuses have three hearts.",
+  "Polar bears could eat as many as 86 penguins in a single sitting if they found them.",
+  "An octopus has three hearts.",
+  "The shortest war in history was between Zanzibar and England in 1896. Zanzibar surrendered after 38 minutes.",
+  "The Earth's ozone layer could be completely healed by 2060.",
+  "The shortest war in history was between Britain and Zanzibar on August 27, 1896. Zanzibar surrendered after 38 minutes.",
+];
 
+// Function to display random facts in an alert
+const displayRandomFact = () => {
+  // Get a random fact from the array
+  const randomFact = randomFacts[Math.floor(Math.random() * randomFacts.length)];
+  // Display the random fact in an alert
+  alert(randomFact);
+};
 
+// Function to trigger the display of random facts at regular intervals
+const triggerRandomFacts = () => {
+  // Call the function to display random facts
+  displayRandomFact();
+  // Set up a callback to call the function again after 5 minutes
+  setTimeout(triggerRandomFacts, 5 * 60 * 1000);
+};
+
+// Call the function to trigger the display of random facts
+triggerRandomFacts();
+
+/////////////////////////////////////////////////////////
 app.post('/OtherIddata', async function (req, res) {
   const driverData = req.body;
 
