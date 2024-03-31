@@ -7159,27 +7159,27 @@ app.get('/security_portal', (req, res) => {
 });
 
 
-///use
-// // Handle WebSocket upgrade requests for HR and security portals
-// app.on('upgrade', (req, socket, head) => {
-//   const pathname = req.url;
-//   const isHRPortal = pathname === '/hr_portal';
-//   const isSecurityPortal = pathname === '/security_portal';
+// /use
+// Handle WebSocket upgrade requests for HR and security portals
+app.on('upgrade', (req, socket, head) => {
+  const pathname = req.url;
+  const isHRPortal = pathname === '/hr_portal';
+  const isSecurityPortal = pathname === '/security_portal';
 
-//   if (isHRPortal) {
-//     wss.handleUpgrade(req, socket, head, (ws) => {
-//       wss.emit('connection', ws);
-//       hrClients.push(ws);
-//     });
-//   } else if (isSecurityPortal) {
-//     wss.handleUpgrade(req, socket, head, (ws) => {
-//       wss.emit('connection', ws);
-//       securityClients.push(ws);
-//     });
-//   } else {
-//     socket.destroy();
-//   }
-// });
+  if (isHRPortal) {
+    wss.handleUpgrade(req, socket, head, (ws) => {
+      wss.emit('connection', ws);
+      hrClients.push(ws);
+    });
+  } else if (isSecurityPortal) {
+    wss.handleUpgrade(req, socket, head, (ws) => {
+      wss.emit('connection', ws);
+      securityClients.push(ws);
+    });
+  } else {
+    socket.destroy();
+  }
+});
 
 
 app.delete('/delete_visitor_details/:id', async function (req, res) {
