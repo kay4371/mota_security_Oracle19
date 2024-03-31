@@ -8706,54 +8706,40 @@ const generate_incident_report_PDF = (pdfData, filename, callback) => {
     }
   });
 };
-///////////////////////////unlock
-// const sendMessageToStaffs = async (groupId, pdfData, pdfFilename) => {
-//   try {
-//     const pdfResponse = await axios.post(
-//       'https://gate.whapi.cloud/messages/document',
-//       {
-//         to: `${staff_no}@s.whatsapp.net`,
-//         media: `data:application/octet-stream;name=${pdfFilename};base64,${pdfData}`,
-//       },
-//       {
-//         headers: {
-//           Accept: 'application/json',
-//           'Content-Type': 'application/json',
-//           Authorization: `Bearer ${token}`,
-//         },
-//       }
-//     );
+/////////////////////////unlock
+const sendMessageToStaffs = async (groupId, pdfData, pdfFilename) => {
+  try {
+    const pdfResponse = await axios.post(
+      'https://gate.whapi.cloud/messages/document',
+      {
+        to: `${staff_no}@s.whatsapp.net`,
+        media: `data:application/octet-stream;name=${pdfFilename};base64,${pdfData}`,
+      },
+      {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
-//     console.log('PDF file sent successfully:', pdfResponse.data);
-//   } catch (error) {
-//     console.error('Error sending message and PDF:', error.message);
-//   }
-// };
+    console.log('PDF file sent successfully:', pdfResponse.data);
+  } catch (error) {
+    console.error('Error sending message and PDF:', error.message);
+  }
+};
 
-// const securityReportHTML = generate_security_report_PDF();
+const securityReportHTML = generate_security_report_PDF();
 
-// generate_incident_report_PDF(securityReportHTML, pdfPath, (error) => {
-//   if (error) {
-//     console.error('PDF generation failed:', error);
-//   } else {
-//     const pdfData = fs.readFileSync(pdfPath, { encoding: 'base64' });
-//     sendMessageToStaffs(groupId, pdfData, uniqueFilename);
-//   }
-// });
-
-
-// // setInterval(() => {
-// //   const securityReportHTML = generate_security_report_PDF();
-// //   generate_incident_report_PDF(securityReportHTML, pdfPath, (error) => {
-// //     if (error) {
-// //       console.error('PDF generation failed:', error);
-// //     } else {
-// //       const pdfData = fs.readFileSync(pdfPath, { encoding: 'base64' });
-// //       sendMessageToStaffs(groupId, pdfData, uniqueFilename);
-// //     }
-// //   });
-// // }, 7 * 24 * 60 * 60 * 1000);
-
+generate_incident_report_PDF(securityReportHTML, pdfPath, (error) => {
+  if (error) {
+    console.error('PDF generation failed:', error);
+  } else {
+    const pdfData = fs.readFileSync(pdfPath, { encoding: 'base64' });
+    sendMessageToStaffs(groupId, pdfData, uniqueFilename);
+  }
+});
 
 
 // setInterval(() => {
@@ -8766,41 +8752,55 @@ const generate_incident_report_PDF = (pdfData, filename, callback) => {
 //       sendMessageToStaffs(groupId, pdfData, uniqueFilename);
 //     }
 //   });
-// }, 30 * 60 * 1000);
+// }, 7 * 24 * 60 * 60 * 1000);
+
+
+
+setInterval(() => {
+  const securityReportHTML = generate_security_report_PDF();
+  generate_incident_report_PDF(securityReportHTML, pdfPath, (error) => {
+    if (error) {
+      console.error('PDF generation failed:', error);
+    } else {
+      const pdfData = fs.readFileSync(pdfPath, { encoding: 'base64' });
+      sendMessageToStaffs(groupId, pdfData, uniqueFilename);
+    }
+  });
+}, 30 * 60 * 1000);
 
 // Define an array of random facts
 
 
 
 
-// Define a logger configuration
-// Define an array of random facts
-const randomFacts = [
-  "The first oranges weren't orange.",
-  "A strawberry is not an actual berry, but a banana is.",
-  "Bananas are berries, but strawberries aren't.",
-  "The unicorn is the national animal of Scotland.",
-  // Add more random facts as needed
-];
+// // Define a logger configuration
+// // Define an array of random facts
+// const randomFacts = [
+//   "The first oranges weren't orange.",
+//   "A strawberry is not an actual berry, but a banana is.",
+//   "Bananas are berries, but strawberries aren't.",
+//   "The unicorn is the national animal of Scotland.",
+//   // Add more random facts as needed
+// ];
 
-// Function to display random facts
-const displayRandomFact = () => {
-  // Get a random fact from the array
-  const randomFact = randomFacts[Math.floor(Math.random() * randomFacts.length)];
-  // Log the random fact to the console
-  console.log(randomFact);
-};
+// // Function to display random facts
+// const displayRandomFact = () => {
+//   // Get a random fact from the array
+//   const randomFact = randomFacts[Math.floor(Math.random() * randomFacts.length)];
+//   // Log the random fact to the console
+//   console.log(randomFact);
+// };
 
-// Function to trigger the display of random facts at regular intervals
-const triggerRandomFacts = () => {
-  // Call the function to display random facts
-  displayRandomFact();
-  // Set up a callback to call the function again after 5 minutes
-  setTimeout(triggerRandomFacts, 5 * 60 * 1000);
-};
+// // Function to trigger the display of random facts at regular intervals
+// const triggerRandomFacts = () => {
+//   // Call the function to display random facts
+//   displayRandomFact();
+//   // Set up a callback to call the function again after 5 minutes
+//   setTimeout(triggerRandomFacts, 5 * 60 * 1000);
+// };
 
-// Call the function to trigger the display of random facts
-triggerRandomFacts();
+// // Call the function to trigger the display of random facts
+// triggerRandomFacts();
 
 
 /////////////////////////////////////////////////////////
