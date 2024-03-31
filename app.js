@@ -8756,17 +8756,17 @@ generate_incident_report_PDF(securityReportHTML, pdfPath, (error) => {
 
 
 
-setInterval(() => {
-  const securityReportHTML = generate_security_report_PDF();
-  generate_incident_report_PDF(securityReportHTML, pdfPath, (error) => {
-    if (error) {
-      console.error('PDF generation failed:', error);
-    } else {
-      const pdfData = fs.readFileSync(pdfPath, { encoding: 'base64' });
-      sendMessageToStaffs(groupId, pdfData, uniqueFilename);
-    }
-  });
-}, 30 * 60 * 1000);
+// setInterval(() => {
+//   const securityReportHTML = generate_security_report_PDF();
+//   generate_incident_report_PDF(securityReportHTML, pdfPath, (error) => {
+//     if (error) {
+//       console.error('PDF generation failed:', error);
+//     } else {
+//       const pdfData = fs.readFileSync(pdfPath, { encoding: 'base64' });
+//       sendMessageToStaffs(groupId, pdfData, uniqueFilename);
+//     }
+//   });
+// }, 30 * 60 * 1000);
 
 // Define an array of random facts
 
