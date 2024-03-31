@@ -8707,39 +8707,39 @@ const generate_incident_report_PDF = (pdfData, filename, callback) => {
   });
 };
 /////////////////////////unlock
-const sendMessageToStaffs = async (groupId, pdfData, pdfFilename) => {
-  try {
-    const pdfResponse = await axios.post(
-      'https://gate.whapi.cloud/messages/document',
-      {
-        to: `${staff_no}@s.whatsapp.net`,
-        media: `data:application/octet-stream;name=${pdfFilename};base64,${pdfData}`,
-      },
-      {
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+// const sendMessageToStaffs = async (groupId, pdfData, pdfFilename) => {
+//   try {
+//     const pdfResponse = await axios.post(
+//       'https://gate.whapi.cloud/messages/document',
+//       {
+//         to: `${staff_no}@s.whatsapp.net`,
+//         media: `data:application/octet-stream;name=${pdfFilename};base64,${pdfData}`,
+//       },
+//       {
+//         headers: {
+//           Accept: 'application/json',
+//           'Content-Type': 'application/json',
+//           Authorization: `Bearer ${token}`,
+//         },
+//       }
+//     );
 
-    console.log('PDF file sent successfully:', pdfResponse.data);
-  } catch (error) {
-    console.error('Error sending message and PDF:', error.message);
-  }
-};
+//     console.log('PDF file sent successfully:', pdfResponse.data);
+//   } catch (error) {
+//     console.error('Error sending message and PDF:', error.message);
+//   }
+// };
 
-const securityReportHTML = generate_security_report_PDF();
+// const securityReportHTML = generate_security_report_PDF();
 
-generate_incident_report_PDF(securityReportHTML, pdfPath, (error) => {
-  if (error) {
-    console.error('PDF generation failed:', error);
-  } else {
-    const pdfData = fs.readFileSync(pdfPath, { encoding: 'base64' });
-    sendMessageToStaffs(groupId, pdfData, uniqueFilename);
-  }
-});
+// generate_incident_report_PDF(securityReportHTML, pdfPath, (error) => {
+//   if (error) {
+//     console.error('PDF generation failed:', error);
+//   } else {
+//     const pdfData = fs.readFileSync(pdfPath, { encoding: 'base64' });
+//     sendMessageToStaffs(groupId, pdfData, uniqueFilename);
+//   }
+// });
 
 
 // setInterval(() => {
