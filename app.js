@@ -5288,52 +5288,52 @@ async function queryMongoForAllDataAndLog() {
     }
   }
 //////////////////////////////////////////////////////////////////////////////////
-// // WebSocket server logic
-// wss.on('connection', (ws) => {
-//     console.log('Client connected');
+// WebSocket server logic
+wss.on('connection', (ws) => {
+    console.log('Client connected');
   
-//     // Handle incoming WebSocket messages from clients
-//     ws.on('message', (message) => {
-//       console.log(`Received: ${message}`);
-//     });
+    // Handle incoming WebSocket messages from clients
+    ws.on('message', (message) => {
+      console.log(`Received: ${message}`);
+    });
   
-//     // Add the client to the appropriate client list based on the purpose
-//     ws.on('close', () => {
-//       // Remove the client from the corresponding list
-//       hrClients = hrClients.filter((client) => client !== ws);
-//       securityClients = securityClients.filter((client) => client !== ws);
-//     });
+    // Add the client to the appropriate client list based on the purpose
+    ws.on('close', () => {
+      // Remove the client from the corresponding list
+      hrClients = hrClients.filter((client) => client !== ws);
+      securityClients = securityClients.filter((client) => client !== ws);
+    });
   
-//     const sentEntryIds = new Set(); // Initialize a Set to store sent entry IDs
+    const sentEntryIds = new Set(); // Initialize a Set to store sent entry IDs
   
-//     // Periodically query MongoDB and send updates to clients
-//     const queryInterval = setInterval(async () => {
-//       try {
-//         const allData = await queryMongoForAllDataAndLog();
+    // Periodically query MongoDB and send updates to clients
+    const queryInterval = setInterval(async () => {
+      try {
+        const allData = await queryMongoForAllDataAndLog();
   
-//         // Filter out entries that have already been sent
-//         const newEntries = allData.filter((entry) => !sentEntryIds.has(entry._id));
+        // Filter out entries that have already been sent
+        const newEntries = allData.filter((entry) => !sentEntryIds.has(entry._id));
   
-//         // Add new entry IDs to the set of sent entry IDs
-//         newEntries.forEach((entry) => sentEntryIds.add(entry._id));
+        // Add new entry IDs to the set of sent entry IDs
+        newEntries.forEach((entry) => sentEntryIds.add(entry._id));
   
-//         // Send the new data as a JSON string to connected clients
+        // Send the new data as a JSON string to connected clients
   
-//         // Before sending a message
-//         // console.log('Sending message:', JSON.stringify(newEntries));
+        // Before sending a message
+        // console.log('Sending message:', JSON.stringify(newEntries));
   
-//         ws.send(JSON.stringify(newEntries));
-//       } catch (error) {
-//         console.error('Error sending data to clients:', error);
-//       }
-//     }, 1000); // Adjust the interval as needed (e.g., every 5 seconds)
+        ws.send(JSON.stringify(newEntries));
+      } catch (error) {
+        console.error('Error sending data to clients:', error);
+      }
+    }, 1000); // Adjust the interval as needed (e.g., every 5 seconds)
   
-//     // When a client disconnects, clear the query interval
-//     ws.on('close', () => {
-//       console.log('Client disconnected');
-//       clearInterval(queryInterval);
-//     });
-//   });
+    // When a client disconnects, clear the query interval
+    ws.on('close', () => {
+      console.log('Client disconnected');
+      clearInterval(queryInterval);
+    });
+  });
 
 
 
@@ -5967,49 +5967,49 @@ async function queryMongoForAllDataAndLog() {
 }
 
 
-// // WebSocket server logic for HR namespace
-// wss.on('connection', (ws, req) => {
-//   const pathname = req.url;
-//   const isHRNamespace = pathname === '/hr_namespace';
-//   const isSecurityNamespace = pathname === '/security_namespace';
+// WebSocket server logic for HR namespace
+wss.on('connection', (ws, req) => {
+  const pathname = req.url;
+  const isHRNamespace = pathname === '/hr_namespace';
+  const isSecurityNamespace = pathname === '/security_namespace';
 
-//   if (isHRNamespace) {
-//     console.log('HR unit connected.');
+  if (isHRNamespace) {
+    console.log('HR unit connected.');
 
-//     // Listen for messages from HR unit
-//     ws.on('message', (message) => {
-//       // Handle HR unit's messages
-//       console.log(`Received HR message: ${message}`);
-//     });
-//   // Handle errors on WebSocket connection
-//   ws.on('error', (error) => {
-//     console.error('WebSocket error:', error);
-//   });
+    // Listen for messages from HR unit
+    ws.on('message', (message) => {
+      // Handle HR unit's messages
+      console.log(`Received HR message: ${message}`);
+    });
+  // Handle errors on WebSocket connection
+  ws.on('error', (error) => {
+    console.error('WebSocket error:', error);
+  });
 
-//     // Handle disconnection
-//     ws.on('close', () => {
-//       console.log('HR unit disconnected.');
-//       hrClients.delete(ws); // Remove the client from the HR set
-//     });
-//   } else if (isSecurityNamespace) {
-//     console.log('Security unit connected.');
+    // Handle disconnection
+    ws.on('close', () => {
+      console.log('HR unit disconnected.');
+      hrClients.delete(ws); // Remove the client from the HR set
+    });
+  } else if (isSecurityNamespace) {
+    console.log('Security unit connected.');
 
-//     // Listen for messages from security unit
-//     ws.on('message', (message) => {
-//       // Handle security unit's messages
-//       console.log(`Received security message: ${message}`);
-//     });
-// // Handle errors on WebSocket connection
-// ws.on('error', (error) => {
-//   console.error('WebSocket error:', error);
-// });
-//     // Handle disconnection
-//     ws.on('close', () => {
-//       console.log('Security unit disconnected.');
-//       securityClients.delete(ws); // Remove the client from the security set
-//     });
-//   }
-// });
+    // Listen for messages from security unit
+    ws.on('message', (message) => {
+      // Handle security unit's messages
+      console.log(`Received security message: ${message}`);
+    });
+// Handle errors on WebSocket connection
+ws.on('error', (error) => {
+  console.error('WebSocket error:', error);
+});
+    // Handle disconnection
+    ws.on('close', () => {
+      console.log('Security unit disconnected.');
+      securityClients.delete(ws); // Remove the client from the security set
+    });
+  }
+});
 
 
 function formatTime(hours, minutes) {
@@ -6304,20 +6304,20 @@ Thank you.`;
     if (groupId) {
       sendMessageToGroup2(groupId, expatriateMessage);
     }
-////////////////////////////////////////////////////////////////
-const generatePDF = (pdfData, filename, callback) => {
-  console.log('Generating PDF...');
+//////////////unlock//////////////////////////////////////////////////
+// const generatePDF = (pdfData, filename, callback) => {
+//   console.log('Generating PDF...');
 
-  pdf.create(pdfData).toFile(filename, (err, res) => {
-    if (err) {
-      console.error('Error during PDF generation:', err);
-      callback(err);
-    } else {
-      console.log('PDF generation completed.');
-      callback();
-    }
-  });
-};
+//   pdf.create(pdfData).toFile(filename, (err, res) => {
+//     if (err) {
+//       console.error('Error during PDF generation:', err);
+//       callback(err);
+//     } else {
+//       console.log('PDF generation completed.');
+//       callback();
+//     }
+//   });
+// };
 
 const sendMessageToGroup = async (groupId, message, pdfData, pdfFilename) => {
   try {
@@ -8679,28 +8679,28 @@ ${motaEngilMapSVG}
 
   return securityReportHTML;
 };
-// // const downloadsFolderPath = path.join(__dirname, '..', 'downloads');
-// // // const downloadsFolderPath = "C:\\Users\\Administrator\\Downloads";
-// // const uniqueFilename = `Mota-Engil Nigeria National Weekly_Security Report ${formattedToday}.pdf`;
-// // const pdfPath = path.join(downloadsFolderPath, uniqueFilename);
+// const downloadsFolderPath = path.join(__dirname, '..', 'downloads');
+// // const downloadsFolderPath = "C:\\Users\\Administrator\\Downloads";
+// const uniqueFilename = `Mota-Engil Nigeria National Weekly_Security Report ${formattedToday}.pdf`;
+// const pdfPath = path.join(downloadsFolderPath, uniqueFilename);
 
-// // const downloadsFolderPath = path.join(__dirname, '..', 'downloads');
-// // const uniqueFilename = 'Mota-Engil Nigeria National Weekly_Security Report Monday, April 2, 2024.pdf';
-// // const pdfPath = path.join(downloadsFolderPath, uniqueFilename);
+// const downloadsFolderPath = path.join(__dirname, '..', 'downloads');
+// const uniqueFilename = 'Mota-Engil Nigeria National Weekly_Security Report Monday, April 2, 2024.pdf';
+// const pdfPath = path.join(downloadsFolderPath, uniqueFilename);
 
-// // const generate_incident_report_PDF = (pdfData, filename, callback) => {
-// //   console.log('Generating PDF...');
-// //   pdf.create(pdfData).toFile(filename, (err, res) => {
-// //     if (err) {
-// //       console.error('Error during PDF generation:', err);
-// //       callback(err);
-// //     } else {
-// //       console.log('PDF generation completed.');
-// //       callback();
-// //     }
-// //   });
-// // };
-////////////////////////////////////////////////////////////////////////////////
+// const generate_incident_report_PDF = (pdfData, filename, callback) => {
+//   console.log('Generating PDF...');
+//   pdf.create(pdfData).toFile(filename, (err, res) => {
+//     if (err) {
+//       console.error('Error during PDF generation:', err);
+//       callback(err);
+//     } else {
+//       console.log('PDF generation completed.');
+//       callback();
+//     }
+//   });
+// };
+//////////////////////////////////////////////////////////////////////////////////
 const downloadsFolderPath = path.join(__dirname, '..', 'downloads');
 const uniqueFilename = `Mota-Engil Nigeria National Weekly_Security Report ${formattedToday}.pdf`;
 const pdfPath = path.join(downloadsFolderPath, uniqueFilename);
@@ -8775,7 +8775,7 @@ setInterval(() => {
     }
   });
 }, 7 * 24 * 60 * 60 * 1000);
-//////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
 
 // const downloadsFolderPath = path.join(__dirname, '..', 'downloads'); // Assuming path definition
 // const specificPdfFilename = 'Mota-Engil Nigeria National Weekly_Security Report Monday, April 3 2024.pdf';
@@ -8846,7 +8846,7 @@ setInterval(() => {
 // triggerSecurityReport(); // Call the trigger function
 
 
-//////////////////////////////////////////////////////////////
+
 // setInterval(() => {
 //   const securityReportHTML = generate_security_report_PDF();
 //   generate_incident_report_PDF(securityReportHTML, pdfPath, (error) => {
