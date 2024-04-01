@@ -4729,10 +4729,10 @@ function generateUniqueCode() {
 // Generate the code when the app is initialized
 const generatedCode = generateUniqueCode();
 
-// const options = {
-//   key: fs.readFileSync('C:\\Users\\motaSecure\\private.key'),
-//   cert: fs.readFileSync('C:\\Users\\motaSecure\\certificate.crt'),
-// };
+const options = {
+  key: fs.readFileSync('C:\\Users\\motaSecure\\private.key'),
+  cert: fs.readFileSync('C:\\Users\\motaSecure\\certificate.crt'),
+};
 
 // const options = {
 //   key: fs.readFileSync('C:\\Users\\motaSecure\\private.key'),
@@ -4753,11 +4753,11 @@ const generatedCode = generateUniqueCode();
 // };
 
 
-const options = {
-  key: fs.readFileSync('./certs/private.key'),
-  cert: fs.readFileSync('./certs/certificate.crt'),
-};
-
+// const options = {
+//   key: fs.readFileSync('./certs/private.key'),
+//   cert: fs.readFileSync('./certs/certificate.crt'),
+// };
+// alert(" Worked")
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static(__dirname + '/public'));
@@ -8704,9 +8704,15 @@ ${motaEngilMapSVG}
 
   return securityReportHTML;
 };
+// const downloadsFolderPath = path.join(__dirname, '..', 'downloads');
+// // const downloadsFolderPath = "C:\\Users\\Administrator\\Downloads";
+// const uniqueFilename = `Mota-Engil Nigeria National Weekly_Security Report ${formattedToday}.pdf`;
+// const pdfPath = path.join(downloadsFolderPath, uniqueFilename);
+
+
+
 const downloadsFolderPath = path.join(__dirname, '..', 'downloads');
-// const downloadsFolderPath = "C:\\Users\\Administrator\\Downloads";
-const uniqueFilename = `Mota-Engil Nigeria National Weekly_Security Report ${formattedToday}.pdf`;
+const uniqueFilename = 'Mota-Engil Nigeria National Weekly_Security Report Monday, April 2, 2024.pdf';
 const pdfPath = path.join(downloadsFolderPath, uniqueFilename);
 
 const generate_incident_report_PDF = (pdfData, filename, callback) => {
@@ -8743,28 +8749,7 @@ const generate_incident_report_PDF = (pdfData, filename, callback) => {
 //   });
 // };
 
-// const downloadsFolderPath = "C:\\Users\\Administrator\\Downloads";
-// const uniqueFilename = `Mota-Engil Nigeria National Weekly_Security Report ${formattedToday}.pdf`;
-// const pdfPath = path.join(downloadsFolderPath, uniqueFilename);
-
-
-// const generate_incident_report_PDF = (pdfData, filename, callback) => {
-//   console.log('Generating PDF...');
-//   try {
-//     pdf.create(pdfData).toFile(filename, (err, res) => {
-//       if (err) {
-//         console.error('Error during PDF generation:', err);
-//         callback(err);
-//       } else {
-//         console.log('PDF generation completed.');
-//         callback(null, filename); // Pass the filename back in the callback
-//       }
-//     });
-//   } catch (error) {
-//     console.error('An error occurred during PDF generation:', error);
-//     callback(error);
-//   }
-// };
+/////////////////////////////////////////////////////////////
 
 
 /////////////////////////unlock
