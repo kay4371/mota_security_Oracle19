@@ -4729,10 +4729,10 @@ function generateUniqueCode() {
 // Generate the code when the app is initialized
 const generatedCode = generateUniqueCode();
 
-const options = {
-  key: fs.readFileSync('C:\\Users\\motaSecure\\private.key'),
-  cert: fs.readFileSync('C:\\Users\\motaSecure\\certificate.crt'),
-};
+// const options = {
+//   key: fs.readFileSync('C:\\Users\\motaSecure\\private.key'),
+//   cert: fs.readFileSync('C:\\Users\\motaSecure\\certificate.crt'),
+// };
 
 // const options = {
 //   key: fs.readFileSync('C:\\Users\\motaSecure\\private.key'),
@@ -4753,10 +4753,10 @@ const options = {
 // };
 
 
-// const options = {
-//   key: fs.readFileSync('./certs/private.key'),
-//   cert: fs.readFileSync('./certs/certificate.crt'),
-// };
+const options = {
+  key: fs.readFileSync('./certs/private.key'),
+  cert: fs.readFileSync('./certs/certificate.crt'),
+};
 // alert(" Worked")
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
