@@ -4747,6 +4747,17 @@ const generatedCode = generateUniqueCode();
 //     cert: fs.readFileSync('C:\\Users\\Public\\motaSecure_test\\certificate.crt'),
 //   };
   
+// const options = {
+//   key: fs.readFileSync('./certs/private.key'),
+//   cert: fs.readFileSync('./certs/certificate.crt'),
+// };
+
+
+const options = {
+  key: fs.readFileSync('./certs/private.key'),
+  cert: fs.readFileSync('./certs/certificate.crt'),
+};
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static(__dirname + '/public'));
@@ -6356,8 +6367,8 @@ const sendMessageToGroup = async (groupId, message, pdfData, pdfFilename) => {
     console.error('Error sending message and PDF:', error.message);
   }
 };
-
-const downloadsFolderPath = "C:\\Users\\Administrator\\Downloads";
+const downloadsFolderPath = path.join(__dirname, '..', 'downloads');
+// const downloadsFolderPath = "C:\\Users\\Administrator\\Downloads";
 const formattedDate = formattedToday ;
 const uniqueFilename = `M.E_Gate_pass_${formattedDate}_${driver_name}_${target_location}.pdf`;
 const pdfPath = path.join(downloadsFolderPath, uniqueFilename);
@@ -8432,416 +8443,329 @@ const formatDate = (date) => {
   return date.toLocaleDateString('en-US', options);
 };
 
-// const formattedToday = formatDate(today);
+const formattedToday = formatDate(today);
 
-// const generate_security_report_PDF = () => {
+const generate_security_report_PDF = () => {
 
-//   const svgMapContent = generateSVGMap();
-//   const lastWeek = new Date(today);
-//   lastWeek.setDate(lastWeek.getDate() - 7);
-//   const formattedStartDate = formatDate(lastWeek);
-//   const formattedEndDate = formattedToday;
+  const svgMapContent = generateSVGMap();
+  const lastWeek = new Date(today);
+  lastWeek.setDate(lastWeek.getDate() - 7);
+  const formattedStartDate = formatDate(lastWeek);
+  const formattedEndDate = formattedToday;
 
-//   const incidentsData = {
-//     fatalities: 70,
-//     injuries: 36,
-//     abductions: 51,
-//     effectsOnAssets: "Some relevant data about effects on assets goes here. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eget ex urna. Donec id tempus nulla. Duis eget nunc vitae elit interdum dapibus.",
-//     riskImpact: "Some relevant data about risk impact goes here. Vestibulum efficitur ligula et nisi semper, ac eleifend dolor mollis. Suspendisse potenti. Nulla facilisi. Integer vel lacus nec arcu gravida malesuada.",
-//     briefSummary: "Highlights of Week 4 incidents:\n- Increased security patrols in high-risk areas\n- Collaboration with local authorities for incident response\n- Implementation of new security protocols"
-//   };
+  const incidentsData = {
+    fatalities: 70,
+    injuries: 36,
+    abductions: 51,
+    effectsOnAssets: "Some relevant data about effects on assets goes here. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eget ex urna. Donec id tempus nulla. Duis eget nunc vitae elit interdum dapibus.",
+    riskImpact: "Some relevant data about risk impact goes here. Vestibulum efficitur ligula et nisi semper, ac eleifend dolor mollis. Suspendisse potenti. Nulla facilisi. Integer vel lacus nec arcu gravida malesuada.",
+    briefSummary: "Highlights of Week 4 incidents:\n- Increased security patrols in high-risk areas\n- Collaboration with local authorities for incident response\n- Implementation of new security protocols"
+  };
 
 
   
-//   const fatalitiesPercentage = (incidentsData.fatalities / 100) * 100;
-//   const injuriesPercentage = (incidentsData.injuries / 100) * 100;
-//   const abductionsPercentage = (incidentsData.abductions / 100) * 100;
+  const fatalitiesPercentage = (incidentsData.fatalities / 100) * 100;
+  const injuriesPercentage = (incidentsData.injuries / 100) * 100;
+  const abductionsPercentage = (incidentsData.abductions / 100) * 100;
 
-//   const keySecurityIncidentsHTML = keySecurityIncidents.map((incident, index) => `
-//   <p>${index + 1}. ${incident.location}. ${incident.date}, ${incident.details}</p>
-// `).join('');
-
-
-//   const maxVal = Math.max(fatalities, injuries, abductions);
-//   const graphWidth = 400;
-//   const barWidth = 100;
-//   const barSpacing = 20;
-//   const graphHeight = 200;
-
-//   const fatalitiesHeight = (fatalities / maxVal) * graphHeight;
-//   const injuriesHeight = (injuries / maxVal) * graphHeight;
-//   const abductionsHeight = (abductions / maxVal) * graphHeight;
+  const keySecurityIncidentsHTML = keySecurityIncidents.map((incident, index) => `
+  <p>${index + 1}. ${incident.location}. ${incident.date}, ${incident.details}</p>
+`).join('');
 
 
-//   const generatePieChart = (data) => {
-//     const total = data.reduce((acc, item) => acc + item.value, 0);
-//     const centerX = 200;
-//     const centerY = 200;
-//     const radius = 150;
-//     let startAngle = -90; // Start angle at 12 o'clock position
+  const maxVal = Math.max(fatalities, injuries, abductions);
+  const graphWidth = 400;
+  const barWidth = 100;
+  const barSpacing = 20;
+  const graphHeight = 200;
 
-//     let chartSVG = `<svg width="400" height="400">`;
-
-//     // Add heading for the pie chart
-//     chartSVG += `<text x="${centerX}" y="30" text-anchor="middle" font-size="16" font-weight="bold">Security Incidents Breakdown</text>`;
-
-//     data.forEach((item, index) => {
-//         const percent = (item.value / total) * 100;
-//         const angle = (percent / 100) * 360;
-//         const largeArcFlag = angle > 180 ? 1 : 0;
-//         const endAngle = startAngle + angle;
-
-//         // Calculate coordinates for the arc
-//         const x1 = centerX + radius * Math.cos((startAngle / 180) * Math.PI);
-//         const y1 = centerY + radius * Math.sin((startAngle / 180) * Math.PI);
-//         const x2 = centerX + radius * Math.cos((endAngle / 180) * Math.PI);
-//         const y2 = centerY + radius * Math.sin((endAngle / 180) * Math.PI);
-
-//         // Calculate midpoint of the arc
-//         const midAngle = startAngle + angle / 2;
-//         const midX = centerX + (radius / 2) * Math.cos((midAngle / 180) * Math.PI);
-//         const midY = centerY + (radius / 2) * Math.sin((midAngle / 180) * Math.PI);
-
-//         // Draw the arc
-//         chartSVG += `
-//             <path d="M${centerX},${centerY} L${x1},${y1} A${radius},${radius} 0 ${largeArcFlag},1 ${x2},${y2} Z" fill="${item.color}"></path>
-//         `;
-
-//         // Add text for the indicator
-//         chartSVG += `<text x="${midX}" y="${midY}" text-anchor="middle" font-size="12">${item.label} (${item.value})</text>`;
-
-//         // Update start angle for the next segment
-//         startAngle = endAngle;
-//     });
-
-//     chartSVG += `</svg>`;
-
-//     return chartSVG;
-// };
-
-// // Example data
-// const dataPie = [
-//     { label: 'Terrorism', value: 25, color: '#FF5733' },
-//     { label: 'Violent Protests', value: 15, color: '#3498DB' },
-//     { label: 'Kidnapping', value: 20, color: '#27AE60' },
-//     { label: 'Other', value: 40, color: '#F39C12' }
-// ];
-
-// const pieChartSVG = generatePieChart(dataPie);
-
-// console.log(pieChartSVG); // Output the SVG for verification
+  const fatalitiesHeight = (fatalities / maxVal) * graphHeight;
+  const injuriesHeight = (injuries / maxVal) * graphHeight;
+  const abductionsHeight = (abductions / maxVal) * graphHeight;
 
 
+  const generatePieChart = (data) => {
+    const total = data.reduce((acc, item) => acc + item.value, 0);
+    const centerX = 200;
+    const centerY = 200;
+    const radius = 150;
+    let startAngle = -90; // Start angle at 12 o'clock position
+
+    let chartSVG = `<svg width="400" height="400">`;
+
+    // Add heading for the pie chart
+    chartSVG += `<text x="${centerX}" y="30" text-anchor="middle" font-size="16" font-weight="bold">Security Incidents Breakdown</text>`;
+
+    data.forEach((item, index) => {
+        const percent = (item.value / total) * 100;
+        const angle = (percent / 100) * 360;
+        const largeArcFlag = angle > 180 ? 1 : 0;
+        const endAngle = startAngle + angle;
+
+        // Calculate coordinates for the arc
+        const x1 = centerX + radius * Math.cos((startAngle / 180) * Math.PI);
+        const y1 = centerY + radius * Math.sin((startAngle / 180) * Math.PI);
+        const x2 = centerX + radius * Math.cos((endAngle / 180) * Math.PI);
+        const y2 = centerY + radius * Math.sin((endAngle / 180) * Math.PI);
+
+        // Calculate midpoint of the arc
+        const midAngle = startAngle + angle / 2;
+        const midX = centerX + (radius / 2) * Math.cos((midAngle / 180) * Math.PI);
+        const midY = centerY + (radius / 2) * Math.sin((midAngle / 180) * Math.PI);
+
+        // Draw the arc
+        chartSVG += `
+            <path d="M${centerX},${centerY} L${x1},${y1} A${radius},${radius} 0 ${largeArcFlag},1 ${x2},${y2} Z" fill="${item.color}"></path>
+        `;
+
+        // Add text for the indicator
+        chartSVG += `<text x="${midX}" y="${midY}" text-anchor="middle" font-size="12">${item.label} (${item.value})</text>`;
+
+        // Update start angle for the next segment
+        startAngle = endAngle;
+    });
+
+    chartSVG += `</svg>`;
+
+    return chartSVG;
+};
+
+// Example data
+const dataPie = [
+    { label: 'Terrorism', value: 25, color: '#FF5733' },
+    { label: 'Violent Protests', value: 15, color: '#3498DB' },
+    { label: 'Kidnapping', value: 20, color: '#27AE60' },
+    { label: 'Other', value: 40, color: '#F39C12' }
+];
+
+const pieChartSVG = generatePieChart(dataPie);
+
+console.log(pieChartSVG); // Output the SVG for verification
 
 
-//   const graphSVG = `
-//     <svg width="${graphWidth}" height="${graphHeight + 60}">
-//       <rect x="${barSpacing}" y="${graphHeight - fatalitiesHeight}" width="${barWidth}" height="${fatalitiesHeight}" fill="#FF5733"></rect>
-//       <text x="${barSpacing + (barWidth / 2)}" y="${graphHeight + 20}" text-anchor="middle" font-size="12">${fatalities}</text>
-//       <text x="${barSpacing + (barWidth / 2)}" y="${graphHeight + 40}" text-anchor="middle" font-size="12">Fatalities</text>
+
+
+  const graphSVG = `
+    <svg width="${graphWidth}" height="${graphHeight + 60}">
+      <rect x="${barSpacing}" y="${graphHeight - fatalitiesHeight}" width="${barWidth}" height="${fatalitiesHeight}" fill="#FF5733"></rect>
+      <text x="${barSpacing + (barWidth / 2)}" y="${graphHeight + 20}" text-anchor="middle" font-size="12">${fatalities}</text>
+      <text x="${barSpacing + (barWidth / 2)}" y="${graphHeight + 40}" text-anchor="middle" font-size="12">Fatalities</text>
       
-//       <rect x="${(2 * barSpacing) + barWidth}" y="${graphHeight - injuriesHeight}" width="${barWidth}" height="${injuriesHeight}" fill="#3498DB"></rect>
-//       <text x="${(2 * barSpacing) + barWidth + (barWidth / 2)}" y="${graphHeight + 20}" text-anchor="middle" font-size="12">${injuries}</text>
-//       <text x="${(2 * barSpacing) + barWidth + (barWidth / 2)}" y="${graphHeight + 40}" text-anchor="middle" font-size="12">Injuries</text>
+      <rect x="${(2 * barSpacing) + barWidth}" y="${graphHeight - injuriesHeight}" width="${barWidth}" height="${injuriesHeight}" fill="#3498DB"></rect>
+      <text x="${(2 * barSpacing) + barWidth + (barWidth / 2)}" y="${graphHeight + 20}" text-anchor="middle" font-size="12">${injuries}</text>
+      <text x="${(2 * barSpacing) + barWidth + (barWidth / 2)}" y="${graphHeight + 40}" text-anchor="middle" font-size="12">Injuries</text>
       
-//       <rect x="${(3 * barSpacing) + (2 * barWidth)}" y="${graphHeight - abductionsHeight}" width="${barWidth}" height="${abductionsHeight}" fill="#27AE60"></rect>
-//       <text x="${(3 * barSpacing) + (2 * barWidth) + (barWidth / 2)}" y="${graphHeight + 20}" text-anchor="middle" font-size="12">${abductions}</text>
-//       <text x="${(3 * barSpacing) + (2 * barWidth) + (barWidth / 2)}" y="${graphHeight + 40}" text-anchor="middle" font-size="12">Abduction/Kidnap</text>
-//     </svg>
-//   `;
-//   const svgDataURI = `data:image/svg+xml;base64,${Buffer.from(svgMapContent).toString('base64')}`;
+      <rect x="${(3 * barSpacing) + (2 * barWidth)}" y="${graphHeight - abductionsHeight}" width="${barWidth}" height="${abductionsHeight}" fill="#27AE60"></rect>
+      <text x="${(3 * barSpacing) + (2 * barWidth) + (barWidth / 2)}" y="${graphHeight + 20}" text-anchor="middle" font-size="12">${abductions}</text>
+      <text x="${(3 * barSpacing) + (2 * barWidth) + (barWidth / 2)}" y="${graphHeight + 40}" text-anchor="middle" font-size="12">Abduction/Kidnap</text>
+    </svg>
+  `;
+  const svgDataURI = `data:image/svg+xml;base64,${Buffer.from(svgMapContent).toString('base64')}`;
 
-//   const securityReportHTML = `
-//     <!DOCTYPE html>
-//     <html lang="en">
-//     <head>
-//         <meta charset="UTF-8">
-//         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-//         <title>Weekly Security Incident Report Nigeria</title>
-//         <style>
+  const securityReportHTML = `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Weekly Security Incident Report Nigeria</title>
+        <style>
         
-//             body {
-//                 font-family: Arial, sans-serif;
-//                 margin: 0;
-//                 padding: 0;
-//             }
-//             .container_security_report {
-//                 max-width: 800px;
-//                 margin: 0 auto;
-//                 padding: 20px;
-//                 background-color: #f8f9fa;
-//                 border-radius: 10px;
-//             }
-//             .header {
-//                 text-align: center;
-//                 margin-bottom: 20px;
-//             }
-//             .footer {
-//                 text-align: right;
-//                 margin-top: 20px;
-//                 font-size: 14px;
-//             }
-//             .footer p {
-//                 margin: 0;
-//             }
-//             .signature {
-//                 text-align: center;
-//                 margin-top: 40px;
-//             }
-//             .watermark {
-//                 position: fixed;
-//                 top: 50%;
-//                 left: 50%;
-//                 transform: translate(-50%, -50%);
-//                 color: rgba(0, 0, 0, 0.1);
-//                 font-size: 5em;
-//                 z-index: -1;
-//             }
-//             .icon {
-//                 width: 50px;
-//                 height: 50px;
-//                 display: inline-block;
-//                 background-color: #007bff;
-//                 border-radius: 50%;
-//                 text-align: center;
-//                 line-height: 50px;
-//                 margin-right: 10px;
-//                 color: #fff;
-//                 font-size: 24px;
-//             }
-//         </style>
-//     </head>
-//     <body>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+            }
+            .container_security_report {
+                max-width: 800px;
+                margin: 0 auto;
+                padding: 20px;
+                background-color: #f8f9fa;
+                border-radius: 10px;
+            }
+            .header {
+                text-align: center;
+                margin-bottom: 20px;
+            }
+            .footer {
+                text-align: right;
+                margin-top: 20px;
+                font-size: 14px;
+            }
+            .footer p {
+                margin: 0;
+            }
+            .signature {
+                text-align: center;
+                margin-top: 40px;
+            }
+            .watermark {
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                color: rgba(0, 0, 0, 0.1);
+                font-size: 5em;
+                z-index: -1;
+            }
+            .icon {
+                width: 50px;
+                height: 50px;
+                display: inline-block;
+                background-color: #007bff;
+                border-radius: 50%;
+                text-align: center;
+                line-height: 50px;
+                margin-right: 10px;
+                color: #fff;
+                font-size: 24px;
+            }
+        </style>
+    </head>
+    <body>
 
-//     <main>
-//     <!-- Your SVG content here -->
-//     <svg xmlns="http://www.w3.org/2000/svg" height="250" width="450" version="1.0" viewBox="-14.709615 -11.98125 127.48333 71.8875">
-//         <defs>
-//             <!-- Define the clip path -->
-//             <clipPath id="a">
-//                 <path d="M0 841.89h1785.827V0H0z"/>
-//             </clipPath>
-//         </defs>
-//         <!-- Apply the clip path to the group -->
-//         <g clip-path="url(#a)" transform="matrix(1.25 0 0 -1.25 -1155.7275 543.7908)">
-//             <!-- Your existing paths and shapes here -->
-//             <path d="M924.582 415.8627h19.169v-19.17h-19.169z" fill="#f7a30a" fill-rule="evenodd"/>
-//             <path d="M943.751 435.0327h19.17v-19.169h-19.17z" fill="#005ec4" fill-rule="evenodd"/>
-//             <path d="M942.4095 435.0324h1.342v-19.169h-19.169v1.341h17.827zm1.3418-19.1694h19.17v-1.342h-17.827v-17.828h-1.343v17.828z" fill="#231f20"/>
-//             <path d="M956.972 409.0544h-.851c-.916-1.695-1.841-3.4-2.767-5.196-.832 1.796-1.674 3.501-2.516 5.196h-.972v-6.381h.748v5.195h.019c.252-.837 1.608-3.564 2.42-5.195h.366c.879 1.631 2.365 4.448 2.627 5.195h.019v-5.195h.907zm4.5322-5.9629c-1.691 0-2.271 1.523-2.271 2.771 0 1.196.654 2.553 2.271 2.553 1.618 0 2.272-1.357 2.272-2.553 0-1.248-.579-2.771-2.272-2.771m0-.637c2.021 0 3.273 1.504 3.273 3.408 0 1.788-1.383 3.192-3.273 3.192-1.889 0-3.271-1.404-3.271-3.192 0-1.904 1.251-3.408 3.271-3.408m19.9776 6.5969l-4.021.003v-6.385h4.426v.639l-3.511.002v2.052h3.058v.637h-3.058v2.414h3.106zm7.1982 0h-.752v-5.087h-.019c-.444.638-2.876 3.428-4.329 5.087h-.679v-6.382h.755v5.078h.018c.397-.555 2.858-3.418 4.29-5.078h.716zm5.9082-3.5732v-2.16c-.367-.174-.783-.229-1.339-.229-1.432 0-2.573 1.084-2.573 2.699 0 1.495.961 2.626 2.677 2.626.725 0 1.329-.247 1.725-.511l.377.528c-.396.319-1.15.62-2.111.62-2.377 0-3.678-1.668-3.678-3.282 0-1.75 1.207-3.318 3.555-3.318.839 0 1.64.21 2.282.428v2.599zm3.2888 3.5735h-.914v-6.382h.914zm1.4983-6.3821h3.658v.639h-2.744v5.743h-.914zm-31.3632.0039v5.742l2.139.001v.638h-5.297v-.639h2.203v-5.742z" fill="#636466" fill-rule="evenodd"/>
-//             <path d="M972.3656 409.0544l-2.607-6.381h.974l.945 2.689.225.639.671 1.91 1.987-5.238h1.102l-2.568 6.381z" fill="#636466"/>
-//             <path d="M972.2015 405.362h4.695V406h-4.466z" fill="#636466" fill-rule="evenodd"/>
-//             </g>
-//     </svg>
-//     <!-- Text added to the right -->
-//     <text x="430" y="40" font-family="Calibri, sans-serif" font-size="24" fill="#333333" font-weight="bold" text-anchor="end">Nigeria Weekly Report</text>
-//     <svg width="100%" height="1">
-//         <line x1="0" y1="0" x2="100%" y2="0" style="stroke: grey; stroke-width: 1;" />
-//     </svg>
-// </main>
+    <main>
+    <!-- Your SVG content here -->
+    <svg xmlns="http://www.w3.org/2000/svg" height="250" width="450" version="1.0" viewBox="-14.709615 -11.98125 127.48333 71.8875">
+        <defs>
+            <!-- Define the clip path -->
+            <clipPath id="a">
+                <path d="M0 841.89h1785.827V0H0z"/>
+            </clipPath>
+        </defs>
+        <!-- Apply the clip path to the group -->
+        <g clip-path="url(#a)" transform="matrix(1.25 0 0 -1.25 -1155.7275 543.7908)">
+            <!-- Your existing paths and shapes here -->
+            <path d="M924.582 415.8627h19.169v-19.17h-19.169z" fill="#f7a30a" fill-rule="evenodd"/>
+            <path d="M943.751 435.0327h19.17v-19.169h-19.17z" fill="#005ec4" fill-rule="evenodd"/>
+            <path d="M942.4095 435.0324h1.342v-19.169h-19.169v1.341h17.827zm1.3418-19.1694h19.17v-1.342h-17.827v-17.828h-1.343v17.828z" fill="#231f20"/>
+            <path d="M956.972 409.0544h-.851c-.916-1.695-1.841-3.4-2.767-5.196-.832 1.796-1.674 3.501-2.516 5.196h-.972v-6.381h.748v5.195h.019c.252-.837 1.608-3.564 2.42-5.195h.366c.879 1.631 2.365 4.448 2.627 5.195h.019v-5.195h.907zm4.5322-5.9629c-1.691 0-2.271 1.523-2.271 2.771 0 1.196.654 2.553 2.271 2.553 1.618 0 2.272-1.357 2.272-2.553 0-1.248-.579-2.771-2.272-2.771m0-.637c2.021 0 3.273 1.504 3.273 3.408 0 1.788-1.383 3.192-3.273 3.192-1.889 0-3.271-1.404-3.271-3.192 0-1.904 1.251-3.408 3.271-3.408m19.9776 6.5969l-4.021.003v-6.385h4.426v.639l-3.511.002v2.052h3.058v.637h-3.058v2.414h3.106zm7.1982 0h-.752v-5.087h-.019c-.444.638-2.876 3.428-4.329 5.087h-.679v-6.382h.755v5.078h.018c.397-.555 2.858-3.418 4.29-5.078h.716zm5.9082-3.5732v-2.16c-.367-.174-.783-.229-1.339-.229-1.432 0-2.573 1.084-2.573 2.699 0 1.495.961 2.626 2.677 2.626.725 0 1.329-.247 1.725-.511l.377.528c-.396.319-1.15.62-2.111.62-2.377 0-3.678-1.668-3.678-3.282 0-1.75 1.207-3.318 3.555-3.318.839 0 1.64.21 2.282.428v2.599zm3.2888 3.5735h-.914v-6.382h.914zm1.4983-6.3821h3.658v.639h-2.744v5.743h-.914zm-31.3632.0039v5.742l2.139.001v.638h-5.297v-.639h2.203v-5.742z" fill="#636466" fill-rule="evenodd"/>
+            <path d="M972.3656 409.0544l-2.607-6.381h.974l.945 2.689.225.639.671 1.91 1.987-5.238h1.102l-2.568 6.381z" fill="#636466"/>
+            <path d="M972.2015 405.362h4.695V406h-4.466z" fill="#636466" fill-rule="evenodd"/>
+            </g>
+    </svg>
+    <!-- Text added to the right -->
+    <text x="430" y="40" font-family="Calibri, sans-serif" font-size="24" fill="#333333" font-weight="bold" text-anchor="end">Nigeria Weekly Report</text>
+    <svg width="100%" height="1">
+        <line x1="0" y1="0" x2="100%" y2="0" style="stroke: grey; stroke-width: 1;" />
+    </svg>
+</main>
 
-// <div class="container_security_report">
-// <div class="header">
-//     <h2 style="color: #00008B; font-size: 24px;">SECURITY ADVISORY</h2>
-//     <h3 style="color: #00008B;">WEEK: ${formattedStartDate} to ${formattedEndDate}</h3>
-//     <h3 style="color: #00008B;">Fatalities: ${incidentsData.fatalities} | Injuries: ${incidentsData.injuries} | Abduction/Kidnap: ${incidentsData.abductions}</h3>
-// </div>
-// <div class="content">
-//     <img src="${svgDataURI}" alt="" />
-//     <div id="map-container">${svgMapContent}</div>
-//     <h2 style="color: #00008B;">Security Risk Update:</h2>
-//     <p style="color: #444; font-family: 'Trebuchet MS', sans-serif; font-size: 12px;">${incidentsData.effectsOnAssets}</p>
+<div class="container_security_report">
+<div class="header">
+    <h2 style="color: #00008B; font-size: 24px;">SECURITY ADVISORY</h2>
+    <h3 style="color: #00008B;">WEEK: ${formattedStartDate} to ${formattedEndDate}</h3>
+    <h3 style="color: #00008B;">Fatalities: ${incidentsData.fatalities} | Injuries: ${incidentsData.injuries} | Abduction/Kidnap: ${incidentsData.abductions}</h3>
+</div>
+<div class="content">
+    <img src="${svgDataURI}" alt="" />
+    <div id="map-container">${svgMapContent}</div>
+    <h2 style="color: #00008B;">Security Risk Update:</h2>
+    <p style="color: #444; font-family: 'Trebuchet MS', sans-serif; font-size: 12px;">${incidentsData.effectsOnAssets}</p>
 
-//     <div class="graph">
-//         ${graphSVG}
-//     </div>
+    <div class="graph">
+        ${graphSVG}
+    </div>
 
-//     <h2 style="color: #00008B;">Risk Impact:</h2>
-//     <p style="color: #444; font-family: 'Trebuchet MS', sans-serif; font-size: 12px;">${incidentsData.riskImpact}</p>
-//     <h3 style="color: #00008B; font-size: 16px;">${incidentsData.briefSummary}</h3>
-// </div>
-// <div class="graph">
-//     ${graphSVG}
-// </div>
+    <h2 style="color: #00008B;">Risk Impact:</h2>
+    <p style="color: #444; font-family: 'Trebuchet MS', sans-serif; font-size: 12px;">${incidentsData.riskImpact}</p>
+    <h3 style="color: #00008B; font-size: 16px;">${incidentsData.briefSummary}</h3>
+</div>
+<div class="graph">
+    ${graphSVG}
+</div>
 
-// <h2 style="color: #00008B;">Key security incidents</h2>
-// <div style="color: #444; font-family: 'Trebuchet MS', sans-serif; font-size: 12px;">
-//     ${keySecurityIncidentsHTML}
-// </div>
-// <div class="graph">
-//     ${pieChartSVG} <!-- Insert the pie chart SVG here -->
-// </div>
+<h2 style="color: #00008B;">Key security incidents</h2>
+<div style="color: #444; font-family: 'Trebuchet MS', sans-serif; font-size: 12px;">
+    ${keySecurityIncidentsHTML}
+</div>
+<div class="graph">
+    ${pieChartSVG} <!-- Insert the pie chart SVG here -->
+</div>
 
-// <h2 style="color: #00008B;">Mota-Engil Operational Zones: Security Overview</h2>
-// ${motaEngilMapSVG}
-// <!-- map here -->
+<h2 style="color: #00008B;">Mota-Engil Operational Zones: Security Overview</h2>
+${motaEngilMapSVG}
+<!-- map here -->
 
-// <div class="footer">
-//         <p style="color: #333; font-size: 18px; font-weight: bold; line-height: 1.5;">Vitor Leite,</p>
-//         <p style="color: #444; font-family: 'Trebuchet MS', sans-serif; font-size: 12px; line-height: 1.5;">Security Manager,</p>
-//         <p style="color: #444; font-family: 'Trebuchet MS', sans-serif; font-size: 12px; line-height: 1.5;">Kama Railway Project</p>
-//     </div>
-// </div>
-// <div class="signature">
-// <p>______________________________</p>
-// <p>Signature</p>
-// </div>
+<div class="footer">
+        <p style="color: #333; font-size: 18px; font-weight: bold; line-height: 1.5;">Vitor Leite,</p>
+        <p style="color: #444; font-family: 'Trebuchet MS', sans-serif; font-size: 12px; line-height: 1.5;">Security Manager,</p>
+        <p style="color: #444; font-family: 'Trebuchet MS', sans-serif; font-size: 12px; line-height: 1.5;">Kama Railway Project</p>
+    </div>
+</div>
+<div class="signature">
+<p>______________________________</p>
+<p>Signature</p>
+</div>
 
-//     </body>
-//     </html>
-//   `;
+    </body>
+    </html>
+  `;
 
-//   return securityReportHTML;
-// };
-
-// // const downloadsFolderPath = "C:\\Users\\Administrator\\Downloads";
-// // const uniqueFilename = `Mota-Engil Nigeria National Weekly_Security Report ${formattedToday}.pdf`;
-// // const pdfPath = path.join(downloadsFolderPath, uniqueFilename);
-
-// // const generate_incident_report_PDF = (pdfData, filename, callback) => {
-// //   console.log('Generating PDF...');
-// //   pdf.create(pdfData).toFile(filename, (err, res) => {
-// //     if (err) {
-// //       console.error('Error during PDF generation:', err);
-// //       callback(err);
-// //     } else {
-// //       console.log('PDF generation completed.');
-// //       callback();
-// //     }
-// //   });
-// // };
-// // const downloadsFolderPath = "C:\\Users\\Administrator\\Downloads";
-// // const uniqueFilename = `Mota-Engil Nigeria National Weekly_Security Report ${formattedToday}.pdf`;
-// // const pdfPath = path.join(downloadsFolderPath, uniqueFilename);
-// // console.log('PDF Path:', pdfPath); // Debugging line to check the constructed PDF path
-
-
-// // const generate_incident_report_PDF = (pdfData, filename, callback) => {
-// //   console.log('Generating PDF...');
-// //   try {
-// //     pdf.create(pdfData).toFile(filename, (err, res) => {
-// //       if (err) {
-// //         console.error('Error during PDF generation:', err);
-// //         callback(err);
-// //       } else {
-// //         console.log('PDF generation completed.');
-// //         callback(null, filename); // Pass the filename back in the callback
-// //       }
-// //     });
-// //   } catch (error) {
-// //     console.error('An error occurred during PDF generation:', error);
-// //     callback(error);
-// //   }
-// // };
-
-
-// // /////////////////////////unlock
-// // const sendMessageToStaffs = async (groupId, pdfData, pdfFilename) => {
-// //   try {
-// //     const pdfResponse = await axios.post(
-// //       'https://gate.whapi.cloud/messages/document',
-// //       {
-// //         to: `${staff_no}@s.whatsapp.net`,
-// //         media: `data:application/octet-stream;name=${pdfFilename};base64,${pdfData}`,
-// //       },
-// //       {
-// //         headers: {
-// //           Accept: 'application/json',
-// //           'Content-Type': 'application/json',
-// //           Authorization: `Bearer ${token}`,
-// //         },
-// //       }
-// //     );
-
-// //     console.log('PDF file sent successfully:', pdfResponse.data);
-// //   } catch (error) {
-// //     console.error('Error sending message and PDF:', error.message);
-// //   }
-// // };
-
-// // const securityReportHTML = generate_security_report_PDF();
-
-// // generate_incident_report_PDF(securityReportHTML, pdfPath, (error) => {
-// //   if (error) {
-// //     console.error('PDF generation failed:', error);
-// //   } else {
-// //     const pdfData = fs.readFileSync(pdfPath, { encoding: 'base64' });
-// //     sendMessageToStaffs(groupId, pdfData, uniqueFilename);
-// //   }
-// // });
-
-
-// // setInterval(() => {
-// //   const securityReportHTML = generate_security_report_PDF();
-// //   generate_incident_report_PDF(securityReportHTML, pdfPath, (error) => {
-// //     if (error) {
-// //       console.error('PDF generation failed:', error);
-// //     } else {
-// //       const pdfData = fs.readFileSync(pdfPath, { encoding: 'base64' });
-// //       sendMessageToStaffs(groupId, pdfData, uniqueFilename);
-// //     }
-// //   });
-// // }, 7 * 24 * 60 * 60 * 1000);
-
-
-
-// // setInterval(() => {
-// //   const securityReportHTML = generate_security_report_PDF();
-// //   generate_incident_report_PDF(securityReportHTML, pdfPath, (error) => {
-// //     if (error) {
-// //       console.error('PDF generation failed:', error);
-// //     } else {
-// //       const pdfData = fs.readFileSync(pdfPath, { encoding: 'base64' });
-// //       sendMessageToStaffs(groupId, pdfData, uniqueFilename);
-// //     }
-// //   });
-// // }, 30 * 60 * 1000);
-
-// // Define an array of random facts
-
-
-
-
-const downloadsFolderPath = "C:\\Users\\Administrator\\Downloads";
-const formattedToday = "2024-03-31"; // Assuming formattedToday is a string representing today's date
+  return securityReportHTML;
+};
+const downloadsFolderPath = path.join(__dirname, '..', 'downloads');
+// const downloadsFolderPath = "C:\\Users\\Administrator\\Downloads";
 const uniqueFilename = `Mota-Engil Nigeria National Weekly_Security Report ${formattedToday}.pdf`;
 const pdfPath = path.join(downloadsFolderPath, uniqueFilename);
 
-console.log('PDF Path:', pdfPath); // Debugging line to check the constructed PDF path
-
 const generate_incident_report_PDF = (pdfData, filename, callback) => {
   console.log('Generating PDF...');
-  try {
-    pdf.create(pdfData).toFile(filename, (err, res) => {
-      if (err) {
-        console.error('Error during PDF generation:', err);
-        callback(err);
-      } else {
-        console.log('PDF generation completed.');
-        callback(null, filename); // Pass the filename back in the callback
-      }
-    });
-  } catch (error) {
-    console.error('An error occurred during PDF generation:', error);
-    callback(error);
-  }
+  pdf.create(pdfData).toFile(filename, (err, res) => {
+    if (err) {
+      console.error('Error during PDF generation:', err);
+      callback(err);
+    } else {
+      console.log('PDF generation completed.');
+      callback();
+    }
+  });
 };
+// const generate_incident_report_PDF = (pdfData, filename, callback) => {
+//   console.log('Generating PDF...');
+//   pdf.create(pdfData).toFile(filename, (err, res) => {
+//     if (err) {
+//       console.error('Error during PDF generation:', err);
+//       callback(err);
+//     } else {
+//       console.log('PDF generation completed.');
+//       console.log('Saved PDF file:', filename);
+//       fs.readFile(filename, 'utf8', (err, data) => {
+//         if (err) {
+//           console.error('Error reading generated PDF file:', err);
+//           callback(err);
+//         } else {
+//           console.log('PDF file content:', data); // Log the PDF file content
+//           callback();
+//         }
+//       });
+//     }
+//   });
+// };
 
-const generate_security_report_PDF = () => {
-  // Hardcoded HTML content for the security report
-  const htmlContent = `
-    <html>
-      <head>
-        <title>Security Report</title>
-      </head>
-      <body>
-        <h1>Security Report</h1>
-        <p>This is a sample security report.</p>
-      </body>
-    </html>
-  `;
-  return htmlContent;
-};
+// const downloadsFolderPath = "C:\\Users\\Administrator\\Downloads";
+// const uniqueFilename = `Mota-Engil Nigeria National Weekly_Security Report ${formattedToday}.pdf`;
+// const pdfPath = path.join(downloadsFolderPath, uniqueFilename);
+
+
+// const generate_incident_report_PDF = (pdfData, filename, callback) => {
+//   console.log('Generating PDF...');
+//   try {
+//     pdf.create(pdfData).toFile(filename, (err, res) => {
+//       if (err) {
+//         console.error('Error during PDF generation:', err);
+//         callback(err);
+//       } else {
+//         console.log('PDF generation completed.');
+//         callback(null, filename); // Pass the filename back in the callback
+//       }
+//     });
+//   } catch (error) {
+//     console.error('An error occurred during PDF generation:', error);
+//     callback(error);
+//   }
+// };
+
 
 /////////////////////////unlock
 const sendMessageToStaffs = async (groupId, pdfData, pdfFilename) => {
@@ -8877,6 +8801,69 @@ generate_incident_report_PDF(securityReportHTML, pdfPath, (error) => {
     sendMessageToStaffs(groupId, pdfData, uniqueFilename);
   }
 });
+
+
+// setInterval(() => {
+//   const securityReportHTML = generate_security_report_PDF();
+//   generate_incident_report_PDF(securityReportHTML, pdfPath, (error) => {
+//     if (error) {
+//       console.error('PDF generation failed:', error);
+//     } else {
+//       const pdfData = fs.readFileSync(pdfPath, { encoding: 'base64' });
+//       sendMessageToStaffs(groupId, pdfData, uniqueFilename);
+//     }
+//   });
+// }, 7 * 24 * 60 * 60 * 1000);
+
+
+
+// setInterval(() => {
+//   const securityReportHTML = generate_security_report_PDF();
+//   generate_incident_report_PDF(securityReportHTML, pdfPath, (error) => {
+//     if (error) {
+//       console.error('PDF generation failed:', error);
+//     } else {
+//       const pdfData = fs.readFileSync(pdfPath, { encoding: 'base64' });
+//       sendMessageToStaffs(groupId, pdfData, uniqueFilename);
+//     }
+//   });
+// }, 30 * 60 * 1000);
+
+// Define an array of random facts
+
+
+
+
+// // Define a logger configuration
+// // Define an array of random facts
+// const randomFacts = [
+//   "The first oranges weren't orange.",
+//   "A strawberry is not an actual berry, but a banana is.",
+//   "Bananas are berries, but strawberries aren't.",
+//   "The unicorn is the national animal of Scotland.",
+//   // Add more random facts as needed
+// ];
+
+// // Function to display random facts
+// const displayRandomFact = () => {
+//   // Get a random fact from the array
+//   const randomFact = randomFacts[Math.floor(Math.random() * randomFacts.length)];
+//   // Log the random fact to the console
+//   console.log(randomFact);
+// };
+
+// // Function to trigger the display of random facts at regular intervals
+// const triggerRandomFacts = () => {
+//   // Call the function to display random facts
+//   displayRandomFact();
+//   // Set up a callback to call the function again after 5 minutes
+//   setTimeout(triggerRandomFacts, 5 * 60 * 1000);
+// };
+
+// // Call the function to trigger the display of random facts
+// triggerRandomFacts();
+
+
 /////////////////////////////////////////////////////////
 app.post('/OtherIddata', async function (req, res) {
   const driverData = req.body;
