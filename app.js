@@ -6305,19 +6305,19 @@ Thank you.`;
       sendMessageToGroup2(groupId, expatriateMessage);
     }
 //////////////unlock//////////////////////////////////////////////////
-// const generatePDF = (pdfData, filename, callback) => {
-//   console.log('Generating PDF...');
+const generatePDF = (pdfData, filename, callback) => {
+  console.log('Generating PDF...');
 
-//   pdf.create(pdfData).toFile(filename, (err, res) => {
-//     if (err) {
-//       console.error('Error during PDF generation:', err);
-//       callback(err);
-//     } else {
-//       console.log('PDF generation completed.');
-//       callback();
-//     }
-//   });
-// };
+  pdf.create(pdfData).toFile(filename, (err, res) => {
+    if (err) {
+      console.error('Error during PDF generation:', err);
+      callback(err);
+    } else {
+      console.log('PDF generation completed.');
+      callback();
+    }
+  });
+};
 
 const sendMessageToGroup = async (groupId, message, pdfData, pdfFilename) => {
   try {
@@ -6818,57 +6818,57 @@ app.post('/receive_gate_pass', async function (req, res) {
     await client.close(); // Close the MongoDB client connection
   }
 });
+////////////////////////unlock
+// // Helper function to generate gate pass ticket from driver data
+// function generateGatePassTicket(driverData) {
+//   // Generate the ticket using driver data
+//   const gatePassTicket = {
+//     driverName: driverData.name,
+//     vehicleDetails: driverData.vehicleDetails,
+//     accessAuthorization: 'Authorized', // Set the access authorization status
+//     // Include additional ticket information
+//     // ...
+//   };
 
-// Helper function to generate gate pass ticket from driver data
-function generateGatePassTicket(driverData) {
-  // Generate the ticket using driver data
-  const gatePassTicket = {
-    driverName: driverData.name,
-    vehicleDetails: driverData.vehicleDetails,
-    accessAuthorization: 'Authorized', // Set the access authorization status
-    // Include additional ticket information
-    // ...
-  };
+//   // Return the generated ticket object
+//   return gatePassTicket;
+// }
 
-  // Return the generated ticket object
-  return gatePassTicket;
-}
+// // Helper function to generate the gate pass ticket in PDF format
+// function generateTicketPDF(ticketData) {
+//   return new Promise((resolve, reject) => {
+//     const doc = new PDFDocument();
 
-// Helper function to generate the gate pass ticket in PDF format
-function generateTicketPDF(ticketData) {
-  return new Promise((resolve, reject) => {
-    const doc = new PDFDocument();
+//     // Set the PDF document properties
+//     doc.info.Title = 'Gate Pass Ticket';
+//     doc.info.Author = 'Your Company';
 
-    // Set the PDF document properties
-    doc.info.Title = 'Gate Pass Ticket';
-    doc.info.Author = 'Your Company';
+//     // Create the PDF content
+//     doc.font('Helvetica-Bold').fontSize(14).text('Gate Pass Ticket', { align: 'center' });
+//     doc.moveDown();
+//     doc.font('Helvetica').fontSize(12).text(`Driver Name: ${ticketData.driverName}`);
+//     doc.moveDown();
+//     doc.font('Helvetica').fontSize(12).text(`Vehicle Details: ${ticketData.vehicleDetails}`);
+//     doc.moveDown();
+//     doc.font('Helvetica').fontSize(12).text(`Access Authorization: ${ticketData.accessAuthorization}`);
+//     // Include additional ticket information
+//     // ...
 
-    // Create the PDF content
-    doc.font('Helvetica-Bold').fontSize(14).text('Gate Pass Ticket', { align: 'center' });
-    doc.moveDown();
-    doc.font('Helvetica').fontSize(12).text(`Driver Name: ${ticketData.driverName}`);
-    doc.moveDown();
-    doc.font('Helvetica').fontSize(12).text(`Vehicle Details: ${ticketData.vehicleDetails}`);
-    doc.moveDown();
-    doc.font('Helvetica').fontSize(12).text(`Access Authorization: ${ticketData.accessAuthorization}`);
-    // Include additional ticket information
-    // ...
+//     // Generate the ticket file
+//     const ticketPath = 'gate_pass_ticket.pdf';
+//     const stream = fs.createWriteStream(ticketPath);
+//     doc.pipe(stream);
+//     doc.end();
 
-    // Generate the ticket file
-    const ticketPath = 'gate_pass_ticket.pdf';
-    const stream = fs.createWriteStream(ticketPath);
-    doc.pipe(stream);
-    doc.end();
+//     stream.on('finish', () => {
+//       resolve(ticketPath);
+//     });
 
-    stream.on('finish', () => {
-      resolve(ticketPath);
-    });
-
-    stream.on('error', (error) => {
-      reject(error);
-    });
-  });
-}
+//     stream.on('error', (error) => {
+//       reject(error);
+//     });
+//   });
+// }
 
 
 app.delete('/deleteDriver/:id', async function (req, res) {
@@ -6945,9 +6945,6 @@ app.post('/return_driver/:driverId', async function (req, res) {
       { _id: driverId },
       { $set: { returned: true } }
     );
-
-
-
     res.send('Driver returned successfully');
   } catch (error) {
     console.error(error);
@@ -7114,16 +7111,11 @@ Kindly reach out to the receptionist to meet them.`;
   }
 });
 
-
-
-
 app.post('/receptionist_newVisitor_entry', (req, res) => {
   // Handle saving visitor details logic here
   // Render the "awaiting visitor" page
   res.render('receptionist_newVisitor_entry.html'); // Replace with your template engine logic
 });
-
-
 
 app.post('/new_visitor', (req, res) => {
   // Handle saving visitor details logic here
@@ -7145,7 +7137,7 @@ app.get('/security_portal', (req, res) => {
 });
 
 app.get('/receptionist', (req, res) => {
-  res.sendFile(__dirname + '/receptionist.html');
+  res.sendFile(__dirname + '/Receptionist.html');
 });
 
 
@@ -7493,8 +7485,6 @@ const cleanPhoneNumber = (phoneNumber) => {
 
 // /////////////////////////////////////////////////working no stored id
 app.use(session({ secret: secretKey, resave: true, saveUninitialized: true }));
-
-
 // Login endpoint
 app.post('/login', async (req, res) => {
   const { phoneNumber, password } = req.body;
@@ -7654,10 +7644,6 @@ app.post('/securityOfficers', async (req, res) => {
     await client.close();
   }
 });
-
-
-
-
 
 // Fetch the data of security officers
 app.get('/rerieve_security_Officers', async (req, res) => {
@@ -8776,123 +8762,6 @@ setInterval(() => {
   });
 }, 7 * 24 * 60 * 60 * 1000);
 ////////////////////////////////////////////////////////////////////////////
-
-// const downloadsFolderPath = path.join(__dirname, '..', 'downloads'); // Assuming path definition
-// const specificPdfFilename = 'Mota-Engil Nigeria National Weekly_Security Report Monday, April 3 2024.pdf';
-
-// function generateSecurityReportAndSend(groupId, callback) {
-//   try {
-//     const pdfPath = path.join(downloadsFolderPath, specificPdfFilename);
-
-//     fs.access(pdfPath, fs.constants.F_OK, (err) => {
-//       if (err) {
-//         console.error('Error: PDF not found:', pdfPath);
-//         return callback(err); // Pass error to callback
-//       }
-
-//       fs.readFile(pdfPath, 'base64', (err, pdfData) => {
-//         if (err) {
-//           console.error('Error reading PDF:', err);
-//           return callback(err); // Pass error to callback
-//         }
-
-//         const media = `data:application/octet-stream;name=${specificPdfFilename};base64,${pdfData}`;
-
-//         sendPDFViaWhatsApp(groupId, media, callback); // Separate function for sending PDF (optional)
-//       });
-//     });
-//   } catch (error) {
-//     console.error('Unexpected error:', error);
-//     callback(error); // Pass error to callback
-//   }
-// }
-
-// function sendPDFViaWhatsApp(groupId, media, callback) {
-//   axios.post(
-//     'https://gate.whapi.cloud/messages/document',
-//     {
-//       to: `${staff_no}@s.whatsapp.net`,
-//       media: media,
-//     },
-//     {
-//       headers: {
-//         Accept: 'application/json',
-//         'Content-Type': 'application/json',
-//         Authorization: `Bearer ${token}`,
-//       },
-//     }
-//   )
-//     .then((response) => {
-//       console.log('PDF file sent successfully:', response.data);
-//       callback(null, response.data); // Pass success message and response data to callback
-//     })
-//     .catch((error) => {
-//       console.error('Error sending message and PDF:', error.message);
-//       callback(error); // Pass error to callback
-//     });
-// }
-
-// // Usage example (assuming a function to trigger the process)
-// function triggerSecurityReport() {
-//   generateSecurityReportAndSend(groupId, (err, response) => {
-//     if (err) {
-//       console.error('Error generating or sending security report:', err);
-//     } else {
-//       console.log('Security report sent successfully:', response);
-//     }
-//   });
-// }
-
-// triggerSecurityReport(); // Call the trigger function
-
-
-
-// setInterval(() => {
-//   const securityReportHTML = generate_security_report_PDF();
-//   generate_incident_report_PDF(securityReportHTML, pdfPath, (error) => {
-//     if (error) {
-//       console.error('PDF generation failed:', error);
-//     } else {
-//       const pdfData = fs.readFileSync(pdfPath, { encoding: 'base64' });
-//       sendMessageToStaffs(groupId, pdfData, uniqueFilename);
-//     }
-//   });
-// }, 30 * 60 * 1000);
-
-// Define an array of random facts
-
-
-
-
-// // Define a logger configuration
-// // Define an array of random facts
-// const randomFacts = [
-//   "The first oranges weren't orange.",
-//   "A strawberry is not an actual berry, but a banana is.",
-//   "Bananas are berries, but strawberries aren't.",
-//   "The unicorn is the national animal of Scotland.",
-//   // Add more random facts as needed
-// ];
-
-// // Function to display random facts
-// const displayRandomFact = () => {
-//   // Get a random fact from the array
-//   const randomFact = randomFacts[Math.floor(Math.random() * randomFacts.length)];
-//   // Log the random fact to the console
-//   console.log(randomFact);
-// };
-
-// // Function to trigger the display of random facts at regular intervals
-// const triggerRandomFacts = () => {
-//   // Call the function to display random facts
-//   displayRandomFact();
-//   // Set up a callback to call the function again after 5 minutes
-//   setTimeout(triggerRandomFacts, 5 * 60 * 1000);
-// };
-
-// // Call the function to trigger the display of random facts
-// triggerRandomFacts();
-
 
 /////////////////////////////////////////////////////////
 app.post('/OtherIddata', async function (req, res) {
