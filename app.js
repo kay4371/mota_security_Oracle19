@@ -4788,7 +4788,13 @@ const uploadS3 = () =>
     
     const wss = new WebSocket.Server({ port: 8080});
     // const io = socketIo(server); // Pass your server instance to initialize socket.io
-    
+    wss.on('error', (error) => {
+      if (error.code === 'EPIPE') {
+        console.error('WebSocket client disconnected unexpectedly.');
+      } else {
+        console.error('WebSocket server error:', error);
+      }
+    });
     // Store connected clients for different purposes
     let hrClients = [];
     let securityClients = [];
@@ -5489,7 +5495,13 @@ wss.on('connection', (ws) => {
   // WebSocket server logic
 serverWebSocket.on('connection', (ws) => {
   console.log('WebSocket connection established');
-
+  serverWebSocket.on('error', (error) => {
+    if (error.code === 'EPIPE') {
+      console.error('WebSocket client disconnected unexpectedly.');
+    } else {
+      console.error('WebSocket server error:', error);
+    }
+  });
   // Handle incoming WebSocket messages from clients
   ws.on('message', (message) => {
     console.log(`Received: ${message}`);
