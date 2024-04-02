@@ -5336,6 +5336,88 @@ async function queryMongoForAllDataAndLog() {
 //   });
 
 //////////////////////////////////////////////////////////////////////////////////
+// // WebSocket server logic
+// wss.on('connection', (ws) => {
+//   console.log('Client connected');
+
+//   // Handle incoming WebSocket messages from clients
+//   ws.on('message', (message) => {
+//     console.log(`Received: ${message}`);
+//   });
+
+//   // Add the client to the appropriate client list based on the purpose
+//   ws.on('close', () => {
+//     // Remove the client from the corresponding list
+//     hrClients = hrClients.filter((client) => client !== ws);
+//     securityClients = securityClients.filter((client) => client !== ws);
+//   });
+
+//   // Add the error handling code here
+//   ws.on('error', (error) => {
+//     if (error.code === 'EPIPE') {
+//       console.error('WebSocket client disconnected unexpectedly.');
+//     } else {
+//       console.error('WebSocket error:', error);
+//     }
+//   });
+
+//   const sentEntryIds = new Set(); // Initialize a Set to store sent entry IDs
+
+//   // Periodically query MongoDB and send updates to clients
+//  // Periodically query MongoDB and send updates to clients
+// const queryInterval = setInterval(async () => {
+//   try {
+//     const allData = await queryMongoForAllDataAndLog();
+
+//     // Filter out entries that have already been sent
+//     const newEntries = allData.filter((entry) => !sentEntryIds.has(entry._id));
+
+//     // Add new entry IDs to the set of sent entry IDs
+//     newEntries.forEach((entry) => sentEntryIds.add(entry._id));
+
+//     // Send the new data as a JSON string to connected clients
+//     // Before sending a message
+//     // console.log('Sending message:', JSON.stringify(newEntries));
+
+//     // Check the WebSocket connection state before sending data
+//     if (ws.readyState === WebSocket.OPEN) {
+//       ws.send(JSON.stringify(newEntries), (error) => {
+//         if (error && error.code === 'EPIPE') {
+//           console.error('WebSocket client disconnected unexpectedly.');
+//         } else if (error) {
+//           console.error('WebSocket error:', error);
+//         }
+//       });
+//     } else {
+//       console.warn('WebSocket connection is not open, skipping data send.');
+//     }
+//   } catch (error) {
+//     console.error('Error sending data to clients:', error);
+//   }
+// }, 1000); // Adjust the interval as needed (e.g., every 5 seconds)
+
+
+  //     ws.send(JSON.stringify(newEntries));
+  //   } catch (error) {
+  //     console.error('Error sending data to clients:', error);
+  //   }
+  // }, 1000); // Adjust the interval as needed (e.g., every 5 seconds)
+
+  // When a client disconnects, clear the query interval
+//   ws.on('close', () => {
+//     console.log('Client disconnected');
+//     clearInterval(queryInterval);
+//   });
+// });
+// Add the global error handler for the WebSocket server
+wss.on('error', (error) => {
+  if (error.code === 'EPIPE') {
+    console.error('WebSocket client disconnected unexpectedly.');
+  } else {
+    console.error('WebSocket server error:', error);
+  }
+});
+
 // WebSocket server logic
 wss.on('connection', (ws) => {
   console.log('Client connected');
@@ -5364,44 +5446,36 @@ wss.on('connection', (ws) => {
   const sentEntryIds = new Set(); // Initialize a Set to store sent entry IDs
 
   // Periodically query MongoDB and send updates to clients
- // Periodically query MongoDB and send updates to clients
-const queryInterval = setInterval(async () => {
-  try {
-    const allData = await queryMongoForAllDataAndLog();
+  const queryInterval = setInterval(async () => {
+    try {
+      const allData = await queryMongoForAllDataAndLog();
 
-    // Filter out entries that have already been sent
-    const newEntries = allData.filter((entry) => !sentEntryIds.has(entry._id));
+      // Filter out entries that have already been sent
+      const newEntries = allData.filter((entry) => !sentEntryIds.has(entry._id));
 
-    // Add new entry IDs to the set of sent entry IDs
-    newEntries.forEach((entry) => sentEntryIds.add(entry._id));
+      // Add new entry IDs to the set of sent entry IDs
+      newEntries.forEach((entry) => sentEntryIds.add(entry._id));
 
-    // Send the new data as a JSON string to connected clients
-    // Before sending a message
-    // console.log('Sending message:', JSON.stringify(newEntries));
+      // Send the new data as a JSON string to connected clients
+      // Before sending a message
+      // console.log('Sending message:', JSON.stringify(newEntries));
 
-    // Check the WebSocket connection state before sending data
-    if (ws.readyState === WebSocket.OPEN) {
-      ws.send(JSON.stringify(newEntries), (error) => {
-        if (error && error.code === 'EPIPE') {
-          console.error('WebSocket client disconnected unexpectedly.');
-        } else if (error) {
-          console.error('WebSocket error:', error);
-        }
-      });
-    } else {
-      console.warn('WebSocket connection is not open, skipping data send.');
+      // Check the WebSocket connection state before sending data
+      if (ws.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify(newEntries), (error) => {
+          if (error && error.code === 'EPIPE') {
+            console.error('WebSocket client disconnected unexpectedly.');
+          } else if (error) {
+            console.error('WebSocket error:', error);
+          }
+        });
+      } else {
+        console.warn('WebSocket connection is not open, skipping data send.');
+      }
+    } catch (error) {
+      console.error('Error sending data to clients:', error);
     }
-  } catch (error) {
-    console.error('Error sending data to clients:', error);
-  }
-}, 1000); // Adjust the interval as needed (e.g., every 5 seconds)
-
-
-  //     ws.send(JSON.stringify(newEntries));
-  //   } catch (error) {
-  //     console.error('Error sending data to clients:', error);
-  //   }
-  // }, 1000); // Adjust the interval as needed (e.g., every 5 seconds)
+  }, 1000); // Adjust the interval as needed (e.g., every 5 seconds)
 
   // When a client disconnects, clear the query interval
   ws.on('close', () => {
@@ -5409,7 +5483,6 @@ const queryInterval = setInterval(async () => {
     clearInterval(queryInterval);
   });
 });
-
 ////////////////////////////////////////////////////////////////
   
   const serverWebSocket = new WebSocket.Server({ port: 8081 });
