@@ -5364,30 +5364,37 @@ wss.on('connection', (ws) => {
   const sentEntryIds = new Set(); // Initialize a Set to store sent entry IDs
 
   // Periodically query MongoDB and send updates to clients
-  const queryInterval = setInterval(async () => {
-    try {
-      const allData = await queryMongoForAllDataAndLog();
+ // Periodically query MongoDB and send updates to clients
+const queryInterval = setInterval(async () => {
+  try {
+    const allData = await queryMongoForAllDataAndLog();
 
-      // Filter out entries that have already been sent
-      const newEntries = allData.filter((entry) => !sentEntryIds.has(entry._id));
+    // Filter out entries that have already been sent
+    const newEntries = allData.filter((entry) => !sentEntryIds.has(entry._id));
 
-      // Add new entry IDs to the set of sent entry IDs
-      newEntries.forEach((entry) => sentEntryIds.add(entry._id));
+    // Add new entry IDs to the set of sent entry IDs
+    newEntries.forEach((entry) => sentEntryIds.add(entry._id));
 
-      // Send the new data as a JSON string to connected clients
+    // Send the new data as a JSON string to connected clients
+    // Before sending a message
+    // console.log('Sending message:', JSON.stringify(newEntries));
 
-      // Before sending a message
-      // console.log('Sending message:', JSON.stringify(newEntries));
-
-      if (ws.readyState === WebSocket.OPEN) {
-        ws.send(JSON.stringify(newEntries));
-      } else {
-        console.warn('WebSocket connection is not open, skipping data send.');
-      }
-    } catch (error) {
-      console.error('Error sending data to clients:', error);
+    // Check the WebSocket connection state before sending data
+    if (ws.readyState === WebSocket.OPEN) {
+      ws.send(JSON.stringify(newEntries), (error) => {
+        if (error && error.code === 'EPIPE') {
+          console.error('WebSocket client disconnected unexpectedly.');
+        } else if (error) {
+          console.error('WebSocket error:', error);
+        }
+      });
+    } else {
+      console.warn('WebSocket connection is not open, skipping data send.');
     }
-  }, 1000); // Adjust the interval as needed (e.g., every 5 seconds)
+  } catch (error) {
+    console.error('Error sending data to clients:', error);
+  }
+}, 1000); // Adjust the interval as needed (e.g., every 5 seconds)
 
 
   //     ws.send(JSON.stringify(newEntries));
@@ -9306,6 +9313,56 @@ app.post('/send_expatriate_parameters', async (req, res) => {
 
 //////////////////////////////////////////////////////////////////////////////////////
 
+function fetchDataForName(name, callback) {
+  // Assume name is already validated and sanitized
+  const userLocation = name; // Assuming user's location details come from the name
+  // const userSpecific = 'crime' + userLocation;
+  // const userSpecific = 'crime' + "nigeria";
+  const userSpecific = "crime";
+  const webLink = `https://www.google.com/search?q=${encodeURIComponent(userSpecific)}&gl=us&hl=en`;
+
+  unirest
+    .get(webLink)
+    .headers({
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.54 Safari/537.36',
+    })
+    .then((response) => {
+      const $ = cheerio.load(response.body);
+      const organicResults = [];
+
+      $(".yuRUbf > a").each((i, el) => {
+        const title = $(el).find('h3').text();
+        const link = $(el).attr('href');
+        const snippet = $(el).parent().find('.IsZvec').text(); // Assuming this class is for snippets
+        const displayedLink = $(el).find('.tjvcx').text(); // Assuming this class is for displayed links
+        
+        organicResults.push({
+          title,
+          link,
+          snippet,
+          displayedLink,
+        });
+      });
+
+      callback(null, organicResults); // Pass the fetched data to the callback function
+    })
+    .catch((error) => {
+      callback(error, null); // Pass any errors to the callback function
+    });
+}
+
+// Example usage:
+fetchDataForName('homer', (error, data) => {
+  if (error) {
+    console.error('Error fetching data:', error);
+  } else {
+    console.log('Fetched data:', data);
+  }
+});
+
+
+//////////////////////////////////////////////////////////////////////////////////////
+
 async function scrapeWebPage(url) {
   try {
       // Fetch HTML content of the webpage
@@ -9370,4 +9427,3 @@ const server = app.listen(port, () => console.log(`Server listening on port ${po
 
 server.keepAliveTimeout = 120 * 1000;
 server.headersTimeout = 120 * 1000;
-
